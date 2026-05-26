@@ -113,9 +113,15 @@ $(document).ready(function () {
 
   // --- LOGIKA PANEL FLOATING TIM PENGEMBANG ---
   
-  // Menggunakan jQuery fadeToggle untuk memunculkan/menyembunyikan panel dengan animasi transisi
-  $("#floatingToggleBtn, #closeTeamBtn").click(function () {
-    $("#teamPopup").fadeToggle(400);
+  // Menggunakan jQuery fadeIn/fadeOut untuk memunculkan/menyembunyikan panel secara premium tanpa tumpang tindih dengan tombol floating
+  $("#floatingToggleBtn").click(function () {
+    $("#teamPopup").fadeIn(400);
+    $(this).fadeOut(400);
+  });
+
+  $("#closeTeamBtn").click(function () {
+    $("#teamPopup").fadeOut(400);
+    $("#floatingToggleBtn").fadeIn(400);
   });
 
   // 1. Animasi hover kustom menggunakan animate()
