@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animasi Menggunakan jQuery</title>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "Arial", "sans-serif"],
+          },
+          animation: {
+            float: "float 6s ease-in-out infinite",
+          },
+          keyframes: {
+            float: {
+              "0%, 100%": { transform: "translateY(0)" },
+              "50%": { transform: "translateY(-10px)" },
+            },
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 text-indigo-50 min-h-screen relative overflow-x-hidden py-10 px-5">
+
+  <div class="absolute -top-24 -left-20 w-80 h-80 bg-purple-500/20 rounded-full blur-[100px] pointer-events-none z-0"></div>
+  <div class="absolute -bottom-24 -right-16 w-64 h-64 bg-emerald-500/20 rounded-full blur-[100px] pointer-events-none z-0"></div>
+
+  <main class="container max-w-5xl mx-auto relative z-10 hidden">
+    
+    <header class="text-center mb-12">
+      <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/20 text-indigo-200 text-sm mb-5 border border-purple-500/30 font-medium">
+        Kelompok 9
+      </span>
+      <h1 class="text-4xl md:text-5xl font-bold text-slate-50 tracking-wide drop-shadow-[0_10px_20px_rgba(108,94,255,0.25)]">
+        Demo Animasi jQuery
+      </h1>
+      <p class="text-slate-300 mt-4 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+        Tekan tombolnya dan lihat kotak beraksi dengan gaya neon, glassmorphism, dan gerakan yang seru.
+      </p>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+      
+      <div class="bg-slate-900/90 border border-slate-700/50 shadow-2xl backdrop-blur-md rounded-3xl p-7">
+        <h2 class="text-2xl font-semibold text-slate-100 mb-2">Kontrol Animasi</h2>
+        <p class="text-slate-400 mb-6 text-sm">Pilih efek berikut dan lihat perubahan real-time di kotak preview.</p>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <button id="hideBtn" class="bg-gradient-to-br from-purple-500 to-teal-500 text-white font-bold py-3 px-4 rounded-full uppercase text-xs shadow-lg hover:-translate-y-1 hover:scale-105 transition-all duration-300">Hide</button>
+          <button id="showBtn" class="bg-gradient-to-br from-purple-500 to-teal-500 text-white font-bold py-3 px-4 rounded-full uppercase text-xs shadow-lg hover:-translate-y-1 hover:scale-105 transition-all duration-300">Show</button>
+          <button id="fadeBtn" class="bg-gradient-to-br from-purple-500 to-teal-500 text-white font-bold py-3 px-4 rounded-full uppercase text-xs shadow-lg hover:-translate-y-1 hover:scale-105 transition-all duration-300">Fade</button>
+          <button id="slideBtn" class="bg-gradient-to-br from-purple-500 to-teal-500 text-white font-bold py-3 px-4 rounded-full uppercase text-xs shadow-lg hover:-translate-y-1 hover:scale-105 transition-all duration-300">Slide</button>
+          <button id="animateBtn" class="bg-gradient-to-br from-purple-500 to-teal-500 text-white font-bold py-3 px-4 rounded-full uppercase text-xs shadow-lg hover:-translate-y-1 hover:scale-105 transition-all duration-300">Animate</button>
+          <button id="bounceBtn" class="bg-gradient-to-br from-purple-500 to-teal-500 text-white font-bold py-3 px-4 rounded-full uppercase text-xs shadow-lg hover:-translate-y-1 hover:scale-105 transition-all duration-300">Bounce</button>
+          <button id="resetBtn" class="bg-slate-800 border border-slate-600 hover:bg-slate-700 text-slate-200 font-bold py-3 px-4 rounded-full uppercase text-xs shadow-md hover:-translate-y-1 transition-all duration-300 sm:col-span-3 mt-1 tracking-wider">Reset Position</button>
+        </div>
+      </div>
+
+      <div class="bg-slate-900/90 border border-slate-700/50 shadow-2xl backdrop-blur-md rounded-3xl p-7 flex flex-col items-center justify-center min-h-[300px]">
+        <h2 class="text-2xl font-semibold text-slate-100 mb-6 self-start w-full">Preview Kotak</h2>
+        <div id="box" class="w-[150px] h-[150px] bg-gradient-to-br from-rose-500 to-purple-400 rounded-3xl relative shadow-[0_20px_40px_rgba(244,63,94,0.3)] animate-float mb-6"></div>
+        <p class="text-slate-400 text-sm text-center">Kotak ini siap bergerak, memudar, dan kembali ke posisi awal.</p>
+      </div>
+    </section>
+
+    <section class="mt-8 bg-slate-900/90 border border-slate-700/50 shadow-2xl backdrop-blur-md rounded-3xl p-7">
+      <h2 class="text-2xl font-semibold text-slate-100 mb-2">Simulasi Indikator Sistem</h2>
+      <p class="text-slate-400 mb-6 text-sm">Demonstrasi animasi dimensi (width) bersamaan dengan efek penghitung angka berjalan (running number).</p>
+
+      <div class="max-w-2xl mx-auto">
+        <div class="flex justify-between text-sm text-slate-300 mb-3">
+          <span class="font-medium tracking-wide">Kapasitas Sistem</span>
+          <span id="progressText" class="font-bold text-teal-400 text-lg">0%</span>
+        </div>
+
+        <div class="w-full bg-slate-800 rounded-full h-8 border border-slate-700 overflow-hidden shadow-inner relative">
+          <div id="progressBar" class="bg-gradient-to-r from-teal-500 via-emerald-400 to-purple-500 h-full rounded-full w-0 relative">
+            <div class="absolute top-0 right-0 bottom-0 left-0 bg-white/20 blur-sm w-1/2 rounded-full transform -skew-x-12"></div>
+          </div>
+        </div>
+
+        <div class="flex gap-4 mt-6 justify-center">
+          <button id="fillBtn" class="bg-slate-800 border border-teal-500/50 hover:bg-teal-600/20 text-teal-300 font-bold py-2.5 px-6 rounded-full text-xs uppercase transition-all duration-300 shadow-[0_0_15px_rgba(20,184,166,0.2)] hover:shadow-[0_0_20px_rgba(20,184,166,0.4)]">
+            Isi Kapasitas
+          </button>
+          <button id="drainBtn" class="bg-slate-800 border border-rose-500/50 hover:bg-rose-600/20 text-rose-300 font-bold py-2.5 px-6 rounded-full text-xs uppercase transition-all duration-300 shadow-[0_0_15px_rgba(244,63,94,0.2)] hover:shadow-[0_0_20px_rgba(244,63,94,0.4)]">
+            Kosongkan
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: SIMULASI ALIRAN DATA JARINGAN -->
+    <section class="mt-8 bg-slate-900/90 border border-slate-700/50 shadow-2xl backdrop-blur-md rounded-3xl p-7">
+      <h2 class="text-2xl font-semibold text-slate-100 mb-2">Simulasi Aliran Data Jaringan</h2>
+      <p class="text-slate-400 mb-6 text-sm">Demonstrasi simulasi pengiriman paket data dari Client ke API Gateway, lalu ke Database, dan kembali lagi.</p>
+
+      <div class="relative w-full min-h-[220px] bg-slate-950/80 rounded-2xl border border-slate-800 p-6 flex flex-col justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:24px_24px] opacity-20 pointer-events-none"></div>
+
+        <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" xmlns="http://www.w3.org/2000/svg">
+          <line id="line1" x1="16.66%" y1="50%" x2="50%" y2="50%" stroke="#334155" stroke-width="4" stroke-dasharray="8 6" />
+          <line id="line2" x1="50%" y1="50%" x2="83.33%" y2="50%" stroke="#334155" stroke-width="4" stroke-dasharray="8 6" />
+        </svg>
+
+        <div id="dataPacket" class="absolute w-4 h-4 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee] z-20 hidden transform -translate-x-1/2 -translate-y-1/2" style="top: 50%; left: 16.66%;">
+          <div class="absolute -inset-1 rounded-full bg-cyan-400 animate-ping opacity-75"></div>
+        </div>
+
+        <div class="grid grid-cols-3 items-center relative z-10 w-full">
+          <div class="flex justify-center">
+            <div id="clientNode" class="w-full max-w-[130px] sm:max-w-[150px] bg-slate-900 border border-slate-700/50 rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center text-center shadow-lg transition-all duration-300 relative">
+              <div class="w-12 h-12 bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 rounded-full flex items-center justify-center mb-2 shadow-inner text-xl">
+                💻
+              </div>
+              <span class="text-xs font-semibold text-slate-200">Client App</span>
+              <span class="node-status text-[10px] text-teal-400 mt-1 px-2 py-0.5 rounded-full bg-teal-500/10 border border-teal-500/20 font-medium">READY</span>
+            </div>
+          </div>
+
+          <div class="flex justify-center">
+            <div id="gatewayNode" class="w-full max-w-[130px] sm:max-w-[150px] bg-slate-900 border border-slate-700/50 rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center text-center shadow-lg transition-all duration-300 relative">
+              <div class="w-12 h-12 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-full flex items-center justify-center mb-2 shadow-inner text-xl">
+                ⚡
+              </div>
+              <span class="text-xs font-semibold text-slate-200">API Gateway</span>
+              <span class="node-status text-[10px] text-slate-400 mt-1 px-2 py-0.5 rounded-full bg-slate-500/10 border border-slate-700/20 font-medium">IDLE</span>
+            </div>
+          </div>
+
+          <div class="flex justify-center">
+            <div id="dbNode" class="w-full max-w-[130px] sm:max-w-[150px] bg-slate-900 border border-slate-700/50 rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center text-center shadow-lg transition-all duration-300 relative">
+              <div class="w-12 h-12 bg-purple-500/10 border border-purple-500/30 text-purple-400 rounded-full flex items-center justify-center mb-2 shadow-inner text-xl">
+                🗄️
+              </div>
+              <span class="text-xs font-semibold text-slate-200">Database</span>
+              <span class="node-status text-[10px] text-slate-400 mt-1 px-2 py-0.5 rounded-full bg-slate-500/10 border border-slate-700/20 font-medium">IDLE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control & Real-time Console Log -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+        <div class="flex flex-col gap-3 justify-center items-center md:items-start">
+          <button id="sendDataBtn" class="w-full bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white font-bold py-3 px-6 rounded-full text-xs uppercase transition-all duration-300 shadow-[0_4px_15px_rgba(20,184,166,0.3)] hover:shadow-[0_4px_25px_rgba(20,184,166,0.5)] tracking-wider">
+            Kirim Data (Request)
+          </button>
+          <button id="resetNetworkBtn" class="w-full bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-300 py-2.5 px-6 rounded-full text-xs uppercase transition-all duration-300">
+            Reset Jaringan
+          </button>
+        </div>
+
+        <div class="md:col-span-2 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col h-[115px]">
+          <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-1">
+            <span class="text-xs text-slate-400 font-mono flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+              Console Log Jaringan
+            </span>
+            <button id="clearLogBtn" class="text-[10px] text-rose-400 hover:text-rose-300 font-medium">Clear Log</button>
+          </div>
+          <div id="networkLogs" class="overflow-y-auto font-mono text-[11px] text-slate-300 space-y-1 pr-1 flex-1 scrollbar-thin">
+            <div class="text-slate-500">// Sistem siap. Klik 'Kirim Data' untuk mulai simulasi.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-8 p-6 sm:p-8 bg-slate-900/90 border border-slate-700/50 rounded-3xl shadow-2xl backdrop-blur-md">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-700/50 pb-5 mb-6">
+        <h2 class="text-2xl font-semibold text-slate-100">UML Diagram</h2>
+        <span class="inline-flex px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-200 text-xs font-medium">Use Case, Sequence, Class</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <div class="bg-slate-800/50 border border-slate-700/30 rounded-2xl p-5">
+          <div class="mb-4">
+            <h3 class="text-lg font-medium text-slate-100">Use Case Diagram</h3>
+            <span class="text-xs text-slate-400">Apa yang dilakukan pengguna</span>
+          </div>
+          <div class="bg-white/5 border border-white/10 rounded-xl p-4 shadow-inner">
+            <div class="flex flex-col gap-3">
+              <div class="border border-dashed border-sky-400/40 bg-sky-500/10 text-slate-200 rounded-xl p-3 text-center font-bold text-sm">User</div>
+              <div class="bg-purple-500/10 border border-purple-500/30 text-slate-200 rounded-xl p-3 text-sm text-center">Pilih efek animasi</div>
+              <div class="bg-purple-500/10 border border-purple-500/30 text-slate-200 rounded-xl p-3 text-sm text-center">Lihat preview kotak</div>
+              <div class="bg-purple-500/10 border border-purple-500/30 text-slate-200 rounded-xl p-3 text-sm text-center">Reset posisi kotak</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-800/50 border border-slate-700/30 rounded-2xl p-5">
+          <div class="mb-4">
+            <h3 class="text-lg font-medium text-slate-100">Sequence Diagram</h3>
+            <span class="text-xs text-slate-400">Alur interaksi komponen</span>
+          </div>
+          <div class="bg-white/5 border border-white/10 rounded-xl p-4 shadow-inner">
+            <div class="flex flex-col gap-3 text-sm">
+              <div class="flex justify-between items-center text-slate-300 bg-slate-900 p-2 rounded-lg border border-blue-500/20">
+                <span class="font-bold text-white bg-blue-500/20 px-2 py-1 rounded text-xs">User</span>
+                <span class="text-xs text-slate-500">→ klik →</span>
+                <span class="font-bold text-white bg-blue-500/20 px-2 py-1 rounded text-xs">WebPage</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-300 bg-slate-900 p-2 rounded-lg border border-blue-500/20">
+                <span class="font-bold text-white bg-blue-500/20 px-2 py-1 rounded text-xs">WebPage</span>
+                <span class="text-xs text-slate-500">→ aksi →</span>
+                <span class="font-bold text-white bg-blue-500/20 px-2 py-1 rounded text-xs">Controller</span>
+              </div>
+              <div class="flex justify-between items-center text-slate-300 bg-slate-900 p-2 rounded-lg border border-blue-500/20">
+                <span class="font-bold text-white bg-blue-500/20 px-2 py-1 rounded text-xs">Controller</span>
+                <span class="text-xs text-slate-500">→ ubah →</span>
+                <span class="font-bold text-white bg-blue-500/20 px-2 py-1 rounded text-xs">BoxElement</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-800/50 border border-slate-700/30 rounded-2xl p-5">
+          <div class="mb-4">
+            <h3 class="text-lg font-medium text-slate-100">Class Diagram</h3>
+            <span class="text-xs text-slate-400">Struktur kelas/komponen</span>
+          </div>
+          <div class="bg-white/5 border border-white/10 rounded-xl p-4 shadow-inner">
+            <div class="flex flex-col gap-3 text-sm">
+              <div class="flex justify-between items-center bg-white/5 p-2 rounded-lg">
+                <strong class="text-slate-100">WebPage</strong>
+                <span class="text-slate-400 text-xs">- tombol</span>
+              </div>
+              <div class="flex flex-col gap-1 bg-white/5 p-2 rounded-lg">
+                <strong class="text-slate-100 mb-1">AnimationController</strong>
+                <span class="text-slate-400 text-xs">+ hide(), show()</span>
+                <span class="text-slate-400 text-xs">+ animate(), bounce()</span>
+              </div>
+              <div class="flex flex-col gap-1 bg-white/5 p-2 rounded-lg">
+                <strong class="text-slate-100 mb-1">BoxElement</strong>
+                <span class="text-slate-400 text-xs">+ fadeToggle()</span>
+                <span class="text-slate-400 text-xs">+ slideToggle()</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+      
+      <div id="teamPopup" class="hidden mb-4 bg-slate-900/95 border border-purple-500/50 shadow-[0_0_30px_rgba(168,85,247,0.3)] backdrop-blur-xl rounded-3xl p-6 w-[90vw] max-w-4xl max-h-[80vh] overflow-y-auto">
+        
+        <div class="flex items-center justify-between border-b border-slate-700/50 pb-4 mb-6 sticky top-0 bg-slate-900/95 z-10">
+          <div>
+            <h2 class="text-2xl font-semibold text-slate-100">Tim Pengembang</h2>
+            <span class="inline-block mt-1 px-3 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-200 text-xs font-medium">Kelompok 9</span>
+          </div>
+          <button id="closeTeamBtn" aria-label="Tutup Panel Tim" class="p-2 bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 rounded-full transition-colors border border-transparent hover:border-rose-500/50">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <div class="team-card bg-slate-800/50 border border-slate-700/30 rounded-2xl p-5 text-center transition-shadow hover:shadow-[0_10px_20px_rgba(168,85,247,0.15)] relative">
+            <div class="w-24 h-24 mx-auto bg-slate-700 rounded-full mb-4 border-2 border-purple-500/50 overflow-hidden flex items-center justify-center shadow-inner">
+              <img src="assets/mrf.jpg" alt="Foto Muhammad Ridzieq F" class="w-full h-full object-cover" />
+            </div>
+            <h3 class="text-lg font-medium text-slate-100 mb-1">Muhammad Ridzieq F</h3>
+            <p class="text-xs text-teal-400 mb-4 font-mono">202331070</p>
+            <button class="detail-btn bg-slate-700 hover:bg-slate-600 text-xs text-white py-1.5 px-4 rounded-full transition-colors border border-slate-600">Lihat Detail</button>
+            <div class="detail-info hidden mt-4 p-3 bg-slate-900/80 rounded-lg text-xs text-slate-300 border border-slate-700 text-left leading-relaxed">
+              Bertugas merancang web dan mengimplementasikan logika jQuery.
+            </div>
+          </div>
+
+          <div class="team-card bg-slate-800/50 border border-slate-700/30 rounded-2xl p-5 text-center transition-shadow hover:shadow-[0_10px_20px_rgba(168,85,247,0.15)] relative">
+            <div class="w-24 h-24 mx-auto bg-slate-700 rounded-full mb-4 border-2 border-purple-500/50 overflow-hidden flex items-center justify-center shadow-inner">
+              <img src="assets/davina.jpg" alt="Foto Davina Najwa Ermawan" class="w-full h-full object-cover" />
+            </div>
+            <h3 class="text-lg font-medium text-slate-100 mb-1">Davina Najwa Ermawan</h3>
+            <p class="text-xs text-teal-400 mb-4 font-mono">202331111</p>
+            <button class="detail-btn bg-slate-700 hover:bg-slate-600 text-xs text-white py-1.5 px-4 rounded-full transition-colors border border-slate-600">Lihat Detail</button>
+            <div class="detail-info hidden mt-4 p-3 bg-slate-900/80 rounded-lg text-xs text-slate-300 border border-slate-700 text-left leading-relaxed">
+              Bertugas menyusun dokumen UML dan mendesain struktur antarmuka.
+            </div>
+          </div>
+
+          <div class="team-card bg-slate-800/50 border border-slate-700/30 rounded-2xl p-5 text-center transition-shadow hover:shadow-[0_10px_20px_rgba(168,85,247,0.15)] relative">
+            <div class="w-24 h-24 mx-auto bg-slate-700 rounded-full mb-4 border-2 border-purple-500/50 overflow-hidden flex items-center justify-center shadow-inner">
+              <img src="assets/dhea.jpg" alt="Foto Dhea Febrina Kusumawardhani" class="w-full h-full object-cover" />
+            </div>
+            <h3 class="text-lg font-medium text-slate-100 mb-1">Dhea Febrina Kusumawardhani</h3>
+            <p class="text-xs text-teal-400 mb-4 font-mono">202331102</p>
+            <button class="detail-btn bg-slate-700 hover:bg-slate-600 text-xs text-white py-1.5 px-4 rounded-full transition-colors border border-slate-600">Lihat Detail</button>
+            <div class="detail-info hidden mt-4 p-3 bg-slate-900/80 rounded-lg text-xs text-slate-300 border border-slate-700 text-left leading-relaxed">
+              Bertugas menyusun laporan dan menyiapkan presentasi.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <button id="floatingToggleBtn" aria-label="Buka Panel Tim" class="group relative flex items-center justify-center w-16 h-16 bg-gradient-to-tr from-purple-600 to-teal-500 rounded-full shadow-[0_10px_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_25px_rgba(20,184,166,0.6)] hover:-translate-y-1 transition-all duration-300 z-50 cursor-pointer">
+        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        
+        <span class="absolute right-full mr-4 px-3 py-1.5 bg-slate-800 text-slate-200 text-xs font-semibold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-slate-700 pointer-events-none">
+          Lihat Tim
+        </span>
+      </button>
+      
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
